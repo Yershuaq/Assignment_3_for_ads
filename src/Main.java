@@ -16,7 +16,7 @@ public class Main {
             MyTestingClass key = new MyTestingClass(random.nextInt(100));
             table.put(key, i);
         }
-        // Печать количества элементов в каждом бакете
+
         for (int i = 0; i < 11; i++) {
             System.out.println("Bucket " + i + ": " + countElementsInBucket(table, i));
         }
