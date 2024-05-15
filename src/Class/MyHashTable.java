@@ -1,7 +1,9 @@
-import java.util.LinkedList;
+package Class;
+
+import java.util.Random;
 
 public class MyHashTable<K, V> {
-    private class HashNode<K, V> {
+    public static class HashNode<K, V> {
         private K key;
         private V value;
         private HashNode<K, V> next;
@@ -9,6 +11,10 @@ public class MyHashTable<K, V> {
         public HashNode(K key, V value) {
             this.key = key;
             this.value = value;
+        }
+
+        public HashNode<K, V> getNext() {
+            return next;
         }
 
         @Override
@@ -22,16 +28,17 @@ public class MyHashTable<K, V> {
     private int size;
 
     public MyHashTable() {
-        chainArray = new HashNode[M];
+        chainArray = (HashNode<K, V>[]) new HashNode[M];
     }
 
     public MyHashTable(int M) {
         this.M = M;
-        chainArray = new HashNode[M];
+        chainArray = (HashNode<K, V>[]) new HashNode[M];
     }
 
     private int hash(K key) {
-        return Math.abs(key.hashCode() % M);
+        int hash = Math.abs(key.hashCode() % M);
+        return hash < 0 ? hash + M : hash;
     }
 
     public void put(K key, V value) {
@@ -65,49 +72,11 @@ public class MyHashTable<K, V> {
         return null;
     }
 
-    public V remove(K key) {
-        int index = hash(key);
-        HashNode<K, V> current = chainArray[index];
-        HashNode<K, V> prev = null;
-        while (current != null) {
-            if (current.key.equals(key)) {
-                if (prev == null) {
-                    chainArray[index] = current.next;
-                } else {
-                    prev.next = current.next;
-                }
-                size--;
-                return current.value;
-            }
-            prev = current;
-            current = current.next;
-        }
-        return null;
+    public int size() {
+        return size;
     }
 
-    public boolean contains(V value) {
-        for (HashNode<K, V> node : chainArray) {
-            HashNode<K, V> current = node;
-            while (current != null) {
-                if (current.value.equals(value)) {
-                    return true;
-                }
-                current = current.next;
-            }
-        }
-        return false;
-    }
-
-    public K getKey(V value) {
-        for (HashNode<K, V> node : chainArray) {
-            HashNode<K, V> current = node;
-            while (current != null) {
-                if (current.value.equals(value)) {
-                    return current.key;
-                }
-                current = current.next;
-            }
-        }
-        return null;
+    public HashNode<K, V> getChainAtIndex(int index) {
+        return chainArray[index];
     }
 }
